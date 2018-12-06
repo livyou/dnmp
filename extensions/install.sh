@@ -30,15 +30,6 @@ if [ ${version} -lt 70200 ]; then
     && docker-php-ext-install $mc mcrypt
 fi
 
-# From PHP 5.6, we can use docker-php-ext-install to install opcache
-if [ ${version} -lt 50600 ]; then
-    mkdir zendopcache \
-    && tar -xf zendopcache-7.0.5.tgz -C zendopcache --strip-components=1 \
-    && ( cd zendopcache && phpize && ./configure && make $mc && make install ) \
-    && docker-php-ext-enable opcache
-else
-    docker-php-ext-install opcache
-fi
 
 if [ "${PHP_REDIS}" != "false" ]; then
     mkdir redis \
@@ -48,18 +39,17 @@ if [ "${PHP_REDIS}" != "false" ]; then
 fi
 
 
-if [ "${PHP_XDEBUG}" != "false" ]; then
-    mkdir xdebug \
-    && tar -xf xdebug-${PHP_XDEBUG}.tgz -C xdebug --strip-components=1 \
-    && ( cd xdebug && phpize && ./configure && make $mc && make install ) \
-    && docker-php-ext-enable xdebug
-fi
-
-
 # swoole require PHP version 5.5 or later.
 if [ "${PHP_SWOOLE}" != "false" ]; then
     mkdir swoole \
-    && tar -xf swoole-${PHP_SWOOLE}.tgz -C swoole --strip-components=1 \
+    && tar -zxf swoole-${PHP_SWOOLE}.tar.gz -C swoole --strip-components=1 \
     && ( cd swoole && phpize && ./configure && make $mc && make install ) \
     && docker-php-ext-enable swoole
+fi
+
+if [ "${PHP_YAF}" != "false" ]; then
+    mkdir yaf \
+    && tar -xf yaf-${PHP_YAF}.tgz -C yaf --strip-components=1 \
+    && ( cd yaf && phpize && ./configure && make $mc && make install ) \
+    && docker-php-ext-enable yaf
 fi

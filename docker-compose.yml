@@ -16,55 +16,19 @@ services:
 
   php72:
     build:
-      context: .
+      context: . 
       args:
-        PHP_VERSION: ${PHP72_VERSION}
-        PHP_XDEBUG: ${PHP72_XDEBUG}
+        PHP_VERSION: ${PHP72_VERSION}        
         PHP_SWOOLE: ${PHP72_SWOOLE}
         PHP_REDIS: ${PHP72_REDIS}
+        PHP_YAF: ${PHP72_YAF}
         REPLACE_SOURCE_LIST: ${REPLACE_SOURCE_LIST}
     volumes:
       - ${SOURCE_DIR}:/var/www/html/:rw
       - ${PHP72_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
       - ${PHP72_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
-    restart: always
-    cap_add:
-      - SYS_PTRACE
-    networks:
-      - default
-
-  php56:
-    build:
-      context: .
-      args:
-        PHP_VERSION: ${PHP56_VERSION}
-        PHP_XDEBUG: ${PHP56_XDEBUG}
-        PHP_SWOOLE: ${PHP56_SWOOLE}
-        PHP_REDIS: ${PHP56_REDIS}
-        REPLACE_SOURCE_LIST: ${REPLACE_SOURCE_LIST}
-    volumes:
-      - ${SOURCE_DIR}:/var/www/html/:rw
-      - ${PHP56_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
-      - ${PHP56_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
-    restart: always
-    cap_add:
-      - SYS_PTRACE
-    networks:
-      - default
-
-  php54:
-    build:
-      context: .
-      args:
-        PHP_VERSION: ${PHP54_VERSION}
-        PHP_XDEBUG: ${PHP54_XDEBUG}
-        PHP_SWOOLE: ${PHP54_SWOOLE}
-        PHP_REDIS: ${PHP54_REDIS}
-        REPLACE_SOURCE_LIST: ${REPLACE_SOURCE_LIST}
-    volumes:
-      - ${SOURCE_DIR}:/var/www/html/:rw
-      - ${PHP54_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
-      - ${PHP54_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ${PHP72_LOG_FILE}:/var/log/php/:rw
+      - /home/log/:/home/log/:rw
     restart: always
     cap_add:
       - SYS_PTRACE
@@ -83,34 +47,19 @@ services:
       - default
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-
   redis:
-    image: redis:${REDIS_VERSION}
+    image: redis:${REDIS_VERSION}    
+    volumes:
+      - ${REDIS_LOG_DIR}:/var/log/redis/:rw
+      - ${REDIS_CONF_FILE}:/usr/local/etc/redis/redis.conf:ro
+      - ${REDIS_DIR}:/var/lib/redis/6379/:rw
+    command:
+      - /usr/local/etc/redis/redis.conf
     restart: always
     networks:
       - default
     ports:
-      - "${REDIS_HOST_PORT}:6379"
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    ports:
-      - "${PHPMYADMIN_HOST_PORT}:80"
-    networks:
-      - default
-    environment:
-      - PMA_HOST=mysql
-      - PMA_PORT=3306
-
-  phpredisadmin:
-    image: erikdubbelboer/phpredisadmin:latest
-    ports:
-      - "${REDISMYADMIN_HOST_PORT}:80"
-    networks:
-      - default
-    environment:
-      - REDIS_1_HOST=redis
-      - REDIS_1_PORT=6379
+      - "${REDIS_HOST_PORT}:6379"  
 
 networks:
   default:

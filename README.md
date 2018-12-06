@@ -181,6 +181,11 @@ PHP容器中肯定是安装了
 
 ## 7.数据库管理
 本项目默认在`docker-compose.yml`中开启了用于MySQL在线管理的*phpMyAdmin*，以及用于redis在线管理的*phpRedisAdmin*，可以根据需要修改或删除。
+连接redis报错：MISCONF Redis is configured to save RDB snapshots
+解决办法：
+1、进入redis容器：docker exec -it dnmp_redis_1 /bin/sh
+2、redis-cli 执行命令：config set stop-writes-on-bgsave-error no
+3、重试就ok了
 
 ### 7.1 phpMyAdmin
 phpMyAdmin容器映射到主机的端口地址是：`8080`，所以主机上访问phpMyAdmin的地址是：

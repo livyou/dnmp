@@ -1,9 +1,9 @@
 ARG PHP_VERSION
 FROM php:${PHP_VERSION}-fpm
 
-ARG PHP_XDEBUG
 ARG PHP_SWOOLE
 ARG PHP_REDIS
+ARG PHP_YAF
 ARG REPLACE_SOURCE_LIST
 
 COPY ./sources.list /etc/apt/sources.list.tmp

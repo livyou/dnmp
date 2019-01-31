@@ -14,13 +14,13 @@ services:
     networks:
       - default
 
-  web-api:
-    build: './bid-go/web-api'
+   web-api:
+    build: 
+      context: './bid-go/web-api'
     container_name: web-api
     stdin_open: true
-    command: ./web_api -e pro
     volumes:
-      - /opt/go/web/src/web_api:/go/src/web_api
+      - /home/log/:/home/log/:rw
     ports:
       - "8003:8003"
     restart: always    

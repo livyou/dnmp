@@ -34,6 +34,19 @@ services:
       - SYS_PTRACE
     networks:
       - default
+  
+  web-api:
+    build: 
+      context: './bid-go/web-api'
+    container_name: web-api
+    stdin_open: true
+    volumes:
+      - /home/log/:/home/log/:rw
+    ports:
+      - "8003:8003"
+    restart: always    
+    networks:
+      - default
 
   mysql:
     image: mysql:${MYSQL_VERSION}

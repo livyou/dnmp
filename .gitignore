@@ -3,3 +3,4 @@
 .env
 www/*
 !www/localhost/
+!www/web_api/

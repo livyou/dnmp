@@ -1,7 +1,8 @@
-version: "3"
+version: "3.6"
 services:
   nginx:
     image: nginx:${NGINX_VERSION}
+    container_name: nginx
     ports:
       - "${NGINX_HTTP_HOST_PORT}:80"
       - "${NGINX_HTTPS_HOST_PORT}:443"
@@ -10,6 +11,9 @@ services:
       - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d/:rw
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
       - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
+    depends_on:
+      - web-api
+      - php72
     restart: always
     networks:
       - default
@@ -23,6 +27,7 @@ services:
         PHP_REDIS: ${PHP72_REDIS}
         PHP_YAF: ${PHP72_YAF}
         REPLACE_SOURCE_LIST: ${REPLACE_SOURCE_LIST}
+    container_name: php72
     volumes:
       - ${SOURCE_DIR}:/var/www/html/:rw
       - ${PHP72_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro
@@ -30,6 +35,9 @@ services:
       - ${PHP72_LOG_FILE}:/var/log/php/:rw
       - /home/log/:/home/log/:rw
     restart: always
+    depends_on:
+      - mysql
+      - redis
     cap_add:
       - SYS_PTRACE
     networks:
@@ -42,6 +50,9 @@ services:
     stdin_open: true
     volumes:
       - /home/log/:/home/log/:rw
+    depends_on:
+      - mysql
+      - redis
     ports:
       - "8003:8003"
     restart: always    
@@ -50,6 +61,7 @@ services:
 
   mysql:
     image: mysql:${MYSQL_VERSION}
+    container_name: mysql
     ports:
       - "${MYSQL_HOST_PORT}:3306"
     volumes:
@@ -60,8 +72,10 @@ services:
       - default
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+
   redis:
-    image: redis:${REDIS_VERSION}    
+    image: redis:${REDIS_VERSION}   
+    container_name: redis 
     volumes:
       - ${REDIS_LOG_DIR}:/var/log/redis/:rw
       - ${REDIS_CONF_FILE}:/usr/local/etc/redis/redis.conf:ro

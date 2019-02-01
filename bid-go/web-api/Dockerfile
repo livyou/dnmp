@@ -6,6 +6,6 @@ COPY . .
 
 RUN go build -o web_api main.go
 
-#RUN ls -lh
+ARG RUN_MODE
 #ENTRYPOINT ["./web_api"]
 CMD ["./web_api","-e","test"]

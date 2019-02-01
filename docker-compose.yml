@@ -46,6 +46,8 @@ services:
   web-api:
     build: 
       context: './bid-go/web-api'
+      args:
+        RUN_MODE: ${RUN_MODE}
     container_name: web-api
     stdin_open: true
     volumes:

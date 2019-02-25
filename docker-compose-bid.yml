@@ -27,8 +27,7 @@ services:
     volumes:
       - /home/log/:/home/log/:rw
       - /dnmp/www/web_api/upload/:/var/www/html/web_api/upload/:rw
-      #静态文件采用nginx时启用，要先将项目的static_ace目录复制/dnmp/www/web_api/static_ace/ ---2019-02-25
-      #- /dnmp/www/web_api/static_ace/:/var/www/html/web_api/static_ace/:rw
+      - /dnmp/bid-go/web-api/static_ace/:/var/www/html/web_api/static_ace/:rw
     depends_on:
       - mysql
       - redis

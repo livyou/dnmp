@@ -4,3 +4,4 @@
 www/*
 !www/localhost/
 !www/web_api/
+!www/web_admin/

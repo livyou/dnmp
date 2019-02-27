@@ -11,4 +11,4 @@ RUN go build -o web_api main.go
 
 ARG RUN_MODE
 #ENTRYPOINT ["./web_api"]
-CMD ["./web_api","-e","test"]
+CMD ["./web_api","-e","pro"]

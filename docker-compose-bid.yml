@@ -14,24 +14,24 @@ services:
       - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf:ro
       - ${NGINX_LOG_DIR}:/var/log/nginx/:rw
     depends_on:
-      - web-api
+      - web-admin
     restart: always
     networks:
       - default
 
-  web-api:
+  web-admin:
     build:
-      context: './bid-go/web-api'
+      context: './bid-go/web-admin'
       args:
         RUN_MODE: ${RUN_MODE}
-    container_name: web-api
+    container_name: web-admin
     environment:
       TZ: Asia/Shanghai
     stdin_open: true
     volumes:
       - /home/log/:/home/log/:rw
-      - /dnmp/www/web_api/upload/:/var/www/html/web_api/upload/:rw
-      - /dnmp/bid-go/web-api/static_ace/:/var/www/html/web_api/static_ace/:rw
+      - /dnmp/www/web_admin/upload/:/var/www/html/web_admin/upload/:rw
+      - /dnmp/bid-go/web-admin/static_ace/:/var/www/html/web_admin/static_ace/:rw
     depends_on:
       - mysql
       - redis
